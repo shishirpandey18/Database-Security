@@ -1,107 +1,134 @@
-Medical Appointment & Records System – Database Setup
+Database Set-Up Medical Appointment and Records System.
 
-This repository contains the PostgreSQL database scripts and helper files for the Medical Appointment & Records System used in our Database Security project.
+This repository is where we kept the PostgreSQL database scripts and helper file of the Medical Appointment and Records System which we applied in our project Database Security.
 
-The database is called medicaldb and models:
+The database is called medicaldb; it represents a small healthcare clinic system, whose main feature is the emphasis on the secure data storage, access control, encryption, and backup.
 
-Users and roles (patients, doctors, pharmacist, admin)
+SQL Scripts
 
-Patients and doctors
-
-Appointments and medical records
-
-Prescriptions
-
-Billing
-
-Simple audit logs
-
-1. Files in this package
-
-SQL scripts
-
-01_create_database.sql
-
-Creates an empty database medicaldb.
-
-Grants basic privileges to postgres (and optionally to project members).
+01 createdatabase.sql
+- This is the creation of the medicaldb.
+- Gives the PostgreSQL superuser base privileges.
 
 02_schema_data_checks.sql
+- Drops by default (option) existing tables.
+- Creates all schema objects: users, patients, doctors, pharmacists, appointments, medical_records, prescriptions, billing, audit_logs
+		
+03_Puts realistic sample data in:
+10 patients
+5 doctors
+1 pharmacist
+1 admin
+appointments, medical records, prescription, billing, audit logs.Verification queries are at the end.
 
-Drops existing tables (commented out by default).
-
-Creates all tables: users, patients, doctors, pharmacists, appointments, medical_records, prescriptions, billing, audit_logs.
-
-Inserts realistic sample data (10 patients, 5 doctors, 1 pharmacist, 1 admin, appointments, records, prescriptions, billing, audit entries).
-
-Contains a set of SELECT queries at the end to quickly verify data and relationships.
-
-Other project files (if present)
-
-02_erd_diagram.png – ERD-style diagram of the schema.
-
-05_roles_and_permissions.sql – Access control / RBAC script (for Part 4 of the project).
-
-2. Prerequisites
-
-PostgreSQL 16 (or compatible PostgreSQL version).
-
-A database superuser account (usually postgres).
-
-pgAdmin 4 or access to the psql command-line client.
-
-The steps below work both on Linux and Windows as long as PostgreSQL is installed.
+Values of what should be expected after execution:
+users: 18
+patients: 10
+doctors: 5
+pharmacists: 1
+appointments: 10
+medical_records: 10
+prescriptions: 5
+billing: 10
+audit_logs: 3
 
 
+05_roles_and_permissions.sql
 
-3. How to create and load the database
-Step 1 – Create the empty database
-
-Option A – Using pgAdmin
-
--Connect to your PostgreSQL server as a superuser (e.g. postgres).
--Open Query Tool on database postgres (not medicaldb).
--Open the file 01_create_database.sql and execute it.
--You should now see a new database medicaldb under Databases.
-
-Option B – Using psql
-
-	psql -U postgres -d postgres -f 01_create_database.sql
-
-Step 2 – Create tables and insert sample data
-
-Connect to the medicaldb database:
--In pgAdmin: right-click medicaldb → Connect → Query Tool.
--In psql: psql -U postgres -d medicaldb.
-
-Open and execute 02_schema_data_checks.sql PART_1 and PART_2
-
-The script will:
-
--(Optionally) drop old tables if you uncomment the DROP TABLE lines at the top.
--Create all schema objects.
--Insert sample users, patients, doctors, appointments, medical records, prescriptions, billing, and audit logs.
-
-Step 3 - Quick checks
-use PART_3 to Run a set of SELECT queries at the end to verify the counts and relationships.
+Implements Role-Based Access Control (RBAC) and Row-Level Security (RLS).
+PostgreSQL group roles:
+1.role_patient
+2.role_doctor
+3.role_pharmacist
+4.role_admin
+5.role_system
+-Default PUBLIC privileges are revoked.
+-Least-privilege permissions are granted per role.
+-Row-Level Security (RLS) is enabled on sensitive tables.
+-Policies ensure users can access only their own data where applicable.
+-A helper function sets session context for RLS enforcement.
 
 
 
+Security Features
 
-Expected values:
--users: 17
--patients: 10
--doctors: 5
--pharmacists: 1
--appointments: 10
--medical_records: 10
--prescriptions: 5
--billing: 10
--audit_logs: 3
+1.Access Control
+-Implemented using PostgreSQL roles and privileges.
+-Row-Level Security policies restrict access to rows based on user context.
+-No direct table access for unauthorized roles.
 
-You can also run the other queries in the script to inspect:
 
--Appointments joined with patients and doctors
--Medical records joined with patients
--Billing entries per patient
--Audit logs with actor usernames
+Encryption at Rest
+-Uses PostgreSQL pgcrypto extension.
+-Sensitive fields are encrypted using symmetric encryption: medical_records.diagnosis, medical_records.treatment_notes, patients.contact_info
+-Encryption uses pgp_sym_encrypt.
+-Decryption requires an explicit key using pgp_sym_decrypt.
+
+This ensures sensitive medical and personal data is unreadable at rest.
+
+
+Backup & Recovery
+-Logical backups are created using pg_dump.
+
+Backup example:pg_dump medicaldb > backups/medicaldb_backup.sql
+
+Restore example: psql medicaldb < backups/medicaldb_backup.sql
+
+Backups preserve encrypted data and full schema structure.
+
+
+Demonstration
+A short video demonstrates:
+Encrypted data stored in database tables
+Controlled decryption using the correct encryption key
+Role-based access restrictions
+Backup creation and verification
+
+No frontend or login page is included; all security is enforced at the database level.
+
+
+Prerequisites
+1.PostgreSQL 16 (or compatible version)
+2.PostgreSQL superuser (e.g. postgres)
+3.psql or pgAdmin 4
+
+
+
+
+
+
+Setup Instructions
+
+Step 1 – C
+
+
+reate the database
+Using psql: psql -U postgres -d postgres -f 01_create_database.sql
+
+Using pgAdmin:
+•Connect as superuser.
+•Open Query Tool on database postgres.
+•Execute 01_create_database.sql.
+
+Step 2 – Create schema and insert data
+•Connect to medicaldb and execute:
+•02_schema_data_checks.sql
+
+
+Step 3 – Apply access control
+
+•Execute:05_roles_and_permissions.sql
+
+
+Step 4 – Verify
+
+Run the verification queries included in the scripts to confirm:
+•Data is present
+•Access restrictions are enforced
+•Encrypted fields are unreadable without decryption
+
+
+
+-This project focuses on database-level security, not application development.
+-Authentication is simulated using PostgreSQL roles and session variables.
+-The design follows security best practices covered in class.
