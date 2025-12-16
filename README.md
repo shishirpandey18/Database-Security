@@ -88,6 +88,7 @@ No frontend or login page is included; all security is enforced at the database 
 
 
 Prerequisites
+
 1.PostgreSQL 16 (or compatible version)
 2.PostgreSQL superuser (e.g. postgres)
 3.psql or pgAdmin 4
