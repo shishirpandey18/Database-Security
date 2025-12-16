@@ -1,10 +1,10 @@
-Database Set-Up Medical Appointment and Records System.
+**Database Set-Up Medical Appointment and Records System.**
 
 This repository is where we kept the PostgreSQL database scripts and helper file of the Medical Appointment and Records System which we applied in our project Database Security.
 
 The database is called medicaldb; it represents a small healthcare clinic system, whose main feature is the emphasis on the secure data storage, access control, encryption, and backup.
 
-SQL Scripts
+**SQL Scripts**
 
 01 createdatabase.sql
 - This is the creation of the medicaldb.
@@ -50,7 +50,7 @@ PostgreSQL group roles:
 
 
 
-Security Features
+**Security Features**
 
 1.Access Control
 -Implemented using PostgreSQL roles and privileges.
@@ -58,7 +58,7 @@ Security Features
 -No direct table access for unauthorized roles.
 
 
-Encryption at Rest
+2.Encryption at Rest
 -Uses PostgreSQL pgcrypto extension.
 -Sensitive fields are encrypted using symmetric encryption: medical_records.diagnosis, medical_records.treatment_notes, patients.contact_info
 -Encryption uses pgp_sym_encrypt.
@@ -67,7 +67,7 @@ Encryption at Rest
 This ensures sensitive medical and personal data is unreadable at rest.
 
 
-Backup & Recovery
+3.Backup & Recovery
 -Logical backups are created using pg_dump.
 
 Backup example:pg_dump medicaldb > backups/medicaldb_backup.sql
@@ -77,7 +77,7 @@ Restore example: psql medicaldb < backups/medicaldb_backup.sql
 Backups preserve encrypted data and full schema structure.
 
 
-Demonstration
+**Demonstration**
 A short video demonstrates:
 Encrypted data stored in database tables
 Controlled decryption using the correct encryption key
@@ -87,23 +87,18 @@ Backup creation and verification
 No frontend or login page is included; all security is enforced at the database level.
 
 
-Prerequisites
+**Prerequisites**
 
 1.PostgreSQL 16 (or compatible version)
+
 2.PostgreSQL superuser (e.g. postgres)
+
 3.psql or pgAdmin 4
 
 
+**Setup Instructions**
 
-
-
-
-Setup Instructions
-
-Step 1 – C
-
-
-reate the database
+Step 1 – Create the database
 Using psql: psql -U postgres -d postgres -f 01_create_database.sql
 
 Using pgAdmin:
