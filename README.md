@@ -1,4 +1,5 @@
 **Database Set-Up Medical Appointment and Records System.**
+
 This repository is where we kept the PostgreSQL database scripts and helper file of the Medical Appointment and Records System which we applied in our project Database Security.
 The database is called medicaldb; it represents a small healthcare clinic system, whose main feature is the emphasis on the secure data storage, access control, encryption, and backup.
 
@@ -84,8 +85,11 @@ No frontend or login page is included; all security is enforced at the database 
 
 
 **Prerequisites**
+
 1.PostgreSQL 16 (or compatible version)
+
 2.PostgreSQL superuser (e.g. postgres)
+
 3.psql or pgAdmin 4
 
 **Setup Instructions**
