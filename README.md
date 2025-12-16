@@ -55,15 +55,20 @@ PostgreSQL group roles:
 1.Access Control
 
 -Implemented using PostgreSQL roles and privileges.
+
 -Row-Level Security policies restrict access to rows based on user context.
+
 -No direct table access for unauthorized roles.
 
 
 2.Encryption at Rest
 
 -Uses PostgreSQL pgcrypto extension.
+
 -Sensitive fields are encrypted using symmetric encryption: medical_records.diagnosis, medical_records.treatment_notes, patients.contact_info
+
 -Encryption uses pgp_sym_encrypt.
+
 -Decryption requires an explicit key using pgp_sym_decrypt.
 
 This ensures sensitive medical and personal data is unreadable at rest.
