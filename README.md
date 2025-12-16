@@ -15,10 +15,15 @@ The database is called medicaldb; it represents a small healthcare clinic system
 - Creates all schema objects: users, patients, doctors, pharmacists, appointments, medical_records, prescriptions, billing, audit_logs
 		
 03_Puts realistic sample data in:
+
 10 patients
+
 5 doctors
+
 1 pharmacist
+
 1 admin
+
 appointments, medical records, prescription, billing, audit logs.Verification queries are at the end.
 
 Values of what should be expected after execution:
